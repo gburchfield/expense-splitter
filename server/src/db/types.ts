@@ -9,7 +9,8 @@ export interface DBWrapper {
 export interface CollectionWrapper<T> {
   find?: (...args: any) => Promise<[T]>,
   findOne: (...args: any) => Promise<T>,
-  UpdateOne?: () => Promise<T>
+  updateOne?: () => Promise<T>,
+  insertOne: (doc: T) => Promise<boolean>
 }
 
 export interface DummyDb {

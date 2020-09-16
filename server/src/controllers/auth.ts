@@ -4,9 +4,30 @@ import logger from '../utils/logger';
 import {decodeAuthHeader} from './helpers';
 import {User} from '../db/types';
 
-const Signup: DummyHandler = (req, res) => {
-  const {body} = req
-  res.json({message: 'dummy success message', body})
+const Signup: DummyHandler = async (req, res) => {
+  let success = false
+  let exceptionMessage: {message: string} | null = null
+  const {body: user} = req
+  const DB = db.getConnection()
+  if (user && user.name){
+    const alreadyExists = await DB.users.findOne({name: user.name})
+    if (!!alreadyExists){
+      exceptionMessage = {message: `user already exists.`}
+    } else {
+      success = await DB.users.insertOne({name: user.name})
+    }
+  } else {
+    exceptionMessage = {message: `'name' not provided.`}
+  }
+  if (success){
+    res.status(200).json({message: `Signup successful. Please Login.`})
+  } else {
+    if (!exceptionMessage){
+      res.status(500).json({message: `Could not save to database. Try again later.`})
+    } else {
+      res.status(400).json(exceptionMessage)
+    }
+  }
 }
 
 const Login: DummyHandler = async (req, res) => {
