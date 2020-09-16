@@ -2,6 +2,17 @@ export interface User {
   name: string
 }
 
+export interface Trip {
+  _id: string,
+  name: string,
+  members: TripMember[]
+}
+
+export interface TripMember {
+  name: string,
+  expenses: string[]
+}
+
 export interface DBWrapper {
   [key: string]: CollectionWrapper<any>
 }

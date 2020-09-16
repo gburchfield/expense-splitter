@@ -1,7 +1,8 @@
-import {CollectionWrapper, DBWrapper, User, DummyDb} from './types';
+import {CollectionWrapper, DBWrapper, User, DummyDb, Trip} from './types';
 
 // Define in-memory variables for dummy DB
 const Users: User[] = [{name: 'glen'}, {name: 'sophia'}, {name: 'corey'}]
+const Trips: Trip[] = []
 
 const users: CollectionWrapper<User> = {
   findOne: (query: {[key: string]: string}) => {
@@ -19,8 +20,25 @@ const users: CollectionWrapper<User> = {
   }
 }
 
+const trips: CollectionWrapper<Trip> = {
+  findOne: (query: {id: string}) => {
+    const {id} = query
+    return new Promise( resolve => {
+      const trip = Trips.find(x => x._id === id)
+      resolve(trip)
+    })
+  },
+  insertOne: (trip) => {
+    return new Promise<boolean>(resolve => {
+      Trips.push(trip)
+      resolve(true)
+    })
+  }
+}
+
 const dbWrapper: DBWrapper = {
-  users
+  users,
+  trips
 }
 
 let connection: DBWrapper | null

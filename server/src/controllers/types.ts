@@ -1,8 +1,10 @@
-import {NextFunction, Request, Response} from 'express';
+import {RequestHandler} from 'express';
 
-export type DummyHandler = (req: Request, res: Response, next?: NextFunction) => void
+export type DummyHandler = RequestHandler
 
 export type DecodeAuthHeader = (header: string) => {username: string, password: string}
+
+export type IsAuthenticated = RequestHandler
 
 export interface AuthController {
   Signup: DummyHandler,

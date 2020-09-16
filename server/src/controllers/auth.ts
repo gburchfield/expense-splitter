@@ -40,9 +40,9 @@ const Login: DummyHandler = async (req, res) => {
     user = await DB.users.findOne({name: username})
   }
   if (!!user){
-    res.writeHead(200, {'Set-Cookie': `token=${user.name}; Secure; HttpOnly; SameSite=Strict; Path=/;`}).end()
+    res.writeHead(200, {'Set-Cookie': `token=${user.name}; HttpOnly; SameSite=Strict; Path=/;`}).end()
   } else {
-    res.status(401).end()
+    res.status(400).end()
   }
 }
 

@@ -1,5 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import * as http from 'http'
 import logger from './utils/logger';
 import {AddressInfo, ListenOptions} from 'net';
@@ -11,6 +12,7 @@ import db from './db';
 // Create and configure Express App
 const app = express()
 app.use(bodyParser.json())
+app.use(cookieParser())
 const distDir = __dirname + '/dist/'
 app.use(express.static(distDir))
 app.use('/auth', auth)
