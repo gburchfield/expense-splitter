@@ -5,12 +5,16 @@ import logger from './utils/logger';
 import {AddressInfo, ListenOptions} from 'net';
 import {ServerOptions} from 'http2';
 import {URL} from 'url';
+import {auth, trips} from './routes';
+import db from './db';
 
+// Create and configure Express App
 const app = express()
 app.use(bodyParser.json())
-
 const distDir = __dirname + '/dist/'
 app.use(express.static(distDir))
+app.use('/auth', auth)
+app.use('/trips', trips)
 
 // Set server options and create http server
 const serverOptions: ServerOptions = {}
@@ -28,6 +32,8 @@ server.on('error', (e: Error) => {
 })
 
 server.on('request', (req: http.IncomingMessage, res: http.ServerResponse) => {
+  // Add Request ID to header
+  req.headers['x-request-id'] = 'DUMMY REQUEST ID'
   const receivedRequest: URL = new URL(req.url as string, `http://${req.headers.host}`)
   logger.log(receivedRequest)
 })
@@ -37,5 +43,8 @@ const listenOptions: ListenOptions = {
   port: parseInt(process.env.PORT as string, 10) || 3000,
   host: process.env.HOST || '127.0.0.1'
 }
-server.listen(listenOptions)
+
+db.connect().then(() => {
+  server.listen(listenOptions)
+})
 
