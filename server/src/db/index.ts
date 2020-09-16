@@ -1,9 +1,14 @@
 import {CollectionWrapper, DBWrapper, User, DummyDb} from './types';
 
+// Define in-memory variables for dummy DB
+const Users: User[] = [{name: 'glen'}]
+
 const users: CollectionWrapper<User> = {
-  find: (id: string) => {
+  findOne: (query: {[key: string]: string}) => {
+    const {name} = query
     return new Promise(resolve => {
-      resolve([{name: id}])
+      const user = Users.find(x => x.name === name)
+      resolve(user)
     })
   }
 }

@@ -7,8 +7,8 @@ export interface DBWrapper {
 }
 
 export interface CollectionWrapper<T> {
-  find: (...args: any) => Promise<[T]>,
-  findOne?: () => Promise<T>,
+  find?: (...args: any) => Promise<[T]>,
+  findOne: (...args: any) => Promise<T>,
   UpdateOne?: () => Promise<T>
 }
 
