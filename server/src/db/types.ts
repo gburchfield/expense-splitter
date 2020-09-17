@@ -1,3 +1,6 @@
+
+export type CreateTripDoc = (tripName: string, memberName: string) => Trip
+
 export interface User {
   name: string
 }
@@ -21,7 +24,7 @@ export interface CollectionWrapper<T> {
   find?: (...args: any) => Promise<[T]>,
   findOne: (...args: any) => Promise<T>,
   updateOne?: () => Promise<T>,
-  insertOne: (doc: T) => Promise<boolean>
+  insertOne: (doc: T) => Promise<{insertedId: string}>
 }
 
 export interface DummyDb {

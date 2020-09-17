@@ -14,7 +14,8 @@ const Signup: DummyHandler = async (req, res) => {
     if (!!alreadyExists){
       exceptionMessage = {message: `user already exists.`}
     } else {
-      success = await DB.users.insertOne({name: user.name})
+      const result = await DB.users.insertOne({name: user.name})
+      success = !!result && !!result.insertedId
     }
   } else {
     exceptionMessage = {message: `'name' not provided.`}

@@ -1,4 +1,6 @@
 import {DecodeAuthHeader, IsAuthenticated} from './types';
+import {CreateTripDoc} from '../db/types';
+import {v4} from 'uuid';
 
 export const decodeAuthHeader: DecodeAuthHeader = (header) => {
   let username: string
@@ -16,5 +18,18 @@ export const isAuthenticated: IsAuthenticated = (req, res, next) => {
     next()
   } else {
     res.status(401).json({message: 'Not Authenticated'})
+  }
+}
+
+export const createTripDoc: CreateTripDoc = (tripName, memberName) => {
+  return {
+    _id: v4(),
+    name: tripName,
+    members: [
+      {
+        name: memberName,
+        expenses: []
+      }
+    ]
   }
 }

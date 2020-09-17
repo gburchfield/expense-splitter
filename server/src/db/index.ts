@@ -15,7 +15,7 @@ const users: CollectionWrapper<User> = {
   insertOne: (user) => {
     return new Promise(resolve => {
       Users.push(user)
-      resolve(true)
+      resolve({insertedId: user.name})
     })
   }
 }
@@ -29,9 +29,9 @@ const trips: CollectionWrapper<Trip> = {
     })
   },
   insertOne: (trip) => {
-    return new Promise<boolean>(resolve => {
+    return new Promise(resolve => {
       Trips.push(trip)
-      resolve(true)
+      resolve({insertedId: trip._id})
     })
   }
 }
