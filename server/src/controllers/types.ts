@@ -7,6 +7,8 @@ export type IsAuthenticated = RequestHandler
 
 export type AuthorizedForTrip = (name: string, trip: Trip) => boolean
 
+export type AddExpenseToTrip = (name: string, amount: number, trip: Trip) => [Trip, string]
+
 export interface AuthenticatedReq extends Request {
   name: string
 }

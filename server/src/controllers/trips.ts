@@ -1,5 +1,5 @@
 import {AuthenticatedReq, TripsController} from './types';
-import {authorizedForTrip, createTripDoc} from './helpers';
+import {addExpenseToTrip, authorizedForTrip, createTripDoc} from './helpers';
 import db from '../db';
 import {CollectionWrapper, RequireKeys, Trip} from '../db/types';
 import {RequestHandler} from 'express';
@@ -30,7 +30,6 @@ const GetAllUserTrips: RequestHandler = async (req, res) => {
 
 const GetTrip: RequestHandler = async (req, res) => {
   const {name, params} = req as AuthenticatedReq
-  console.log(params)
   const {trip_id} = params
   const query = {_id: trip_id}
   const DB = db.getConnection()
@@ -46,8 +45,28 @@ const UpdateTrip: RequestHandler = (req, res) => {
   res.json({message: 'dummy success message'})
 }
 
-const AddExpense: RequestHandler = (req, res) => {
-  res.json({message: 'dummy success message'})
+const AddExpense: RequestHandler = async (req, res) => {
+  const {name, params, body} = req as AuthenticatedReq
+  const {trip_id} = params
+  const query = {_id: trip_id}
+  const {amount} = body
+  if (amount || !isNaN(parseFloat(amount))){
+    const DB = db.getConnection()
+    const trip = await DB.trips.findOne(query)
+    if (trip && authorizedForTrip(name, trip)){
+      const [updatedTrip, expenseId] = addExpenseToTrip(name, parseFloat(amount), trip)
+      const result = await (DB.trips as RequireKeys<CollectionWrapper<Trip>, 'updateOne'>).updateOne(query, updatedTrip)
+      if (result){
+        res.status(200).json({expenseId})
+      } else {
+        res.status(404).end()
+      }
+    } else {
+      res.status(500).end()
+    }
+  } else {
+    res.status(400).json({message: `'amount' not provided or not correct type/format.`})
+  }
 }
 
 const RemoveExpense: RequestHandler = (req, res) => {

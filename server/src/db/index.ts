@@ -43,6 +43,22 @@ const trips: CollectionWrapper<Trip> = {
       Trips.push(trip)
       resolve({insertedId: trip._id})
     })
+  },
+  updateOne: (filter, newDoc) => {
+    return new Promise(resolve => {
+      let index = -1
+      Trips.forEach((x, i) => {
+        if (x._id === filter._id){
+          index = i
+        }
+      })
+      if (index >= 0){
+        Trips[index] = newDoc
+        resolve(newDoc)
+      } else {
+        resolve(null)
+      }
+    })
   }
 }
 

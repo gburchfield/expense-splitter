@@ -30,7 +30,7 @@ export interface DBWrapper {
 export interface CollectionWrapper<T> {
   find?: (...args: any) => Promise<T[]>,
   findOne: (...args: any) => Promise<T>,
-  updateOne?: () => Promise<T>,
+  updateOne?: (filter: {_id: string}, doc: T) => Promise<T | null>,
   insertOne: (doc: T) => Promise<{insertedId: string}>
 }
 

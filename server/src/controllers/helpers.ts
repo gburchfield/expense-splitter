@@ -1,5 +1,5 @@
-import {AuthorizedForTrip, DecodeAuthHeader, IsAuthenticated} from './types';
-import {CreateTripDoc} from '../db/types';
+import {AddExpenseToTrip, AuthorizedForTrip, DecodeAuthHeader, IsAuthenticated} from './types';
+import {CreateTripDoc, Expense} from '../db/types';
 import {v4} from 'uuid';
 
 export const decodeAuthHeader: DecodeAuthHeader = (header) => {
@@ -39,4 +39,18 @@ export const authorizedForTrip: AuthorizedForTrip = (name, trip) => {
   const {members} = trip
   members.forEach(x => isAuthorized = isAuthorized || x.name === name)
   return isAuthorized
+}
+
+export const addExpenseToTrip: AddExpenseToTrip = (name, amount, trip) => {
+  const expense: Expense = {
+    _id: v4(),
+    amount: (Math.round(amount * 100) / 100).toFixed(2).toString()
+  }
+  trip.members.forEach((x, i) => {
+    if (x.name === name){
+      x.expenses.push(expense)
+      trip.members[i] = x
+    }
+  })
+  return [trip, expense._id]
 }
