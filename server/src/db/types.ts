@@ -1,6 +1,8 @@
 
 export type CreateTripDoc = (tripName: string, memberName: string) => Trip
 
+export type CreateTripMemberDoc = (name: string) => TripMember
+
 export interface User {
   name: string
 }
@@ -8,14 +10,23 @@ export interface User {
 export interface Trip {
   _id: string,
   name: string,
-  members: TripMember[]
+  members: TripMember[],
+  total_expense: string
 }
 
 export type RequireKeys<T, TNames extends keyof T> = T & { [P in keyof T]-?: P extends TNames ? T[P] : never }
 
 export interface TripMember {
   name: string,
-  expenses: Expense[]
+  expenses: Expense[],
+  total_expense: string,
+  transactions: Transaction[],
+  complete: boolean
+}
+
+export interface Transaction {
+  to: string,
+  amount: string
 }
 
 export interface Expense {

@@ -1,5 +1,5 @@
 import {AuthenticatedReq, TripsController} from './types';
-import {addExpenseToTrip, authorizedForTrip, createTripDoc} from './helpers';
+import {addExpenseToTrip, addMemberToTrip, authorizedForTrip, createTripDoc} from './helpers';
 import db from '../db';
 import {CollectionWrapper, RequireKeys, Trip} from '../db/types';
 import {RequestHandler} from 'express';
@@ -54,15 +54,15 @@ const AddExpense: RequestHandler = async (req, res) => {
     const DB = db.getConnection()
     const trip = await DB.trips.findOne(query)
     if (trip && authorizedForTrip(name, trip)){
-      const [updatedTrip, expenseId] = addExpenseToTrip(name, parseFloat(amount), trip)
+      const [updatedTrip, expenseId] = addExpenseToTrip(name, amount, trip)
       const result = await (DB.trips as RequireKeys<CollectionWrapper<Trip>, 'updateOne'>).updateOne(query, updatedTrip)
       if (result){
         res.status(200).json({expenseId})
       } else {
-        res.status(404).end()
+        res.status(500).end()
       }
     } else {
-      res.status(500).end()
+      res.status(401).end()
     }
   } else {
     res.status(400).json({message: `'amount' not provided or not correct type/format.`})
@@ -73,13 +73,44 @@ const RemoveExpense: RequestHandler = (req, res) => {
   res.json({message: 'dummy success message'})
 }
 
+const AddMember: RequestHandler = async (req, res) => {
+  const {name, params, body} = req as AuthenticatedReq
+  const {trip_id} = params
+  const tripQuery = {_id: trip_id}
+  const {name: memberName} = body
+  const memberQuery = {name: memberName}
+  if (memberName){
+    const DB = db.getConnection()
+    const member = await DB.users.findOne(memberQuery)
+    if (member){
+      const trip = await DB.trips.findOne(tripQuery)
+      if (trip && authorizedForTrip(name, trip)){
+        const updatedTrip = addMemberToTrip(memberName, trip)
+        const result = await (DB.trips as RequireKeys<CollectionWrapper<Trip>, 'updateOne'>).updateOne(tripQuery, updatedTrip)
+        if (result){
+          res.status(200).end()
+        } else {
+          res.status(500).end()
+        }
+      } else {
+        res.status(401).end()
+      }
+    } else {
+      res.status(400).json({message: `User does not exist for 'name' provided.`})
+    }
+  } else {
+    res.status(400).json({message: `'name' not provided.`})
+  }
+}
+
 const tripsController: TripsController = {
   CreateTrip,
   GetAllUserTrips,
   GetTrip,
   UpdateTrip,
   AddExpense,
-  RemoveExpense
+  RemoveExpense,
+  AddMember
 }
 
 export default tripsController
