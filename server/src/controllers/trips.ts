@@ -1,9 +1,10 @@
-import {AuthenticatedReq, DummyHandler, TripsController} from './types';
+import {AuthenticatedReq, TripsController} from './types';
 import {authorizedForTrip, createTripDoc} from './helpers';
 import db from '../db';
 import {CollectionWrapper, RequireKeys, Trip} from '../db/types';
+import {RequestHandler} from 'express';
 
-const CreateTrip: DummyHandler = async (req, res) => {
+const CreateTrip: RequestHandler = async (req, res) => {
   const {name: memberName, body} = req as AuthenticatedReq
   const {name: tripName} = body
   if (tripName){
@@ -20,14 +21,14 @@ const CreateTrip: DummyHandler = async (req, res) => {
   }
 }
 
-const GetAllUserTrips: DummyHandler = async (req, res) => {
+const GetAllUserTrips: RequestHandler = async (req, res) => {
   const {name} = req as AuthenticatedReq
   const DB = db.getConnection()
   const trips = await (DB.trips as RequireKeys<CollectionWrapper<Trip>, 'find'>).find({name})
   res.status(200).json(trips)
 }
 
-const GetTrip: DummyHandler = async (req, res) => {
+const GetTrip: RequestHandler = async (req, res) => {
   const {name, params} = req as AuthenticatedReq
   console.log(params)
   const {trip_id} = params
@@ -41,7 +42,15 @@ const GetTrip: DummyHandler = async (req, res) => {
   }
 }
 
-const UpdateTrip: DummyHandler = (req, res) => {
+const UpdateTrip: RequestHandler = (req, res) => {
+  res.json({message: 'dummy success message'})
+}
+
+const AddExpense: RequestHandler = (req, res) => {
+  res.json({message: 'dummy success message'})
+}
+
+const RemoveExpense: RequestHandler = (req, res) => {
   res.json({message: 'dummy success message'})
 }
 
@@ -49,7 +58,9 @@ const tripsController: TripsController = {
   CreateTrip,
   GetAllUserTrips,
   GetTrip,
-  UpdateTrip
+  UpdateTrip,
+  AddExpense,
+  RemoveExpense
 }
 
 export default tripsController

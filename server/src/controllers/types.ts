@@ -1,8 +1,6 @@
 import {Request, RequestHandler} from 'express';
 import {Trip} from '../db/types';
 
-export type DummyHandler = RequestHandler
-
 export type DecodeAuthHeader = (header: string) => {username: string, password: string}
 
 export type IsAuthenticated = RequestHandler
@@ -14,13 +12,15 @@ export interface AuthenticatedReq extends Request {
 }
 
 export interface AuthController {
-  Signup: DummyHandler,
-  Login: DummyHandler
+  Signup: RequestHandler,
+  Login: RequestHandler
 }
 
 export interface TripsController {
-  CreateTrip: DummyHandler,
-  GetAllUserTrips: DummyHandler,
-  GetTrip: DummyHandler,
-  UpdateTrip: DummyHandler
+  CreateTrip: RequestHandler,
+  GetAllUserTrips: RequestHandler,
+  GetTrip: RequestHandler,
+  UpdateTrip: RequestHandler,
+  AddExpense: RequestHandler,
+  RemoveExpense: RequestHandler
 }

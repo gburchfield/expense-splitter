@@ -15,7 +15,12 @@ export type RequireKeys<T, TNames extends keyof T> = T & { [P in keyof T]-?: P e
 
 export interface TripMember {
   name: string,
-  expenses: string[]
+  expenses: Expense[]
+}
+
+export interface Expense {
+  _id: string,
+  amount: string
 }
 
 export interface DBWrapper {

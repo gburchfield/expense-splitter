@@ -16,5 +16,7 @@ trips.post('/', tripsController.CreateTrip)
 trips.get('/', tripsController.GetAllUserTrips)
 trips.get('/:trip_id', tripsController.GetTrip)
 trips.put('/:trip_id', tripsController.UpdateTrip)
+trips.post('/:trip_id/expenses', tripsController.AddExpense)
+trips.delete('/:trip_id/expenses/:expense_id', tripsController.RemoveExpense)
 
 export {auth, trips}

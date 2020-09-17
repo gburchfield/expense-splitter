@@ -1,10 +1,11 @@
-import {AuthController, DummyHandler} from './types';
+import {AuthController} from './types';
 import db from '../db';
 import logger from '../utils/logger';
 import {decodeAuthHeader} from './helpers';
 import {User} from '../db/types';
+import {RequestHandler} from 'express';
 
-const Signup: DummyHandler = async (req, res) => {
+const Signup: RequestHandler = async (req, res) => {
   let success = false
   let exceptionMessage: {message: string} | null = null
   const {body: user} = req
@@ -31,7 +32,7 @@ const Signup: DummyHandler = async (req, res) => {
   }
 }
 
-const Login: DummyHandler = async (req, res) => {
+const Login: RequestHandler = async (req, res) => {
   let user: User | null = null
   const DB = db.getConnection()
   const {headers} = req
