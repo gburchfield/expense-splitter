@@ -21,6 +21,16 @@ const users: CollectionWrapper<User> = {
 }
 
 const trips: CollectionWrapper<Trip> = {
+  find: (query: {name: string}) => {
+    return new Promise(resolve => {
+      const result = Trips.filter(x => {
+        let hasUser = false
+        x.members.forEach(y => hasUser = hasUser || y.name === query.name)
+        return hasUser
+      })
+      resolve(result)
+    })
+  },
   findOne: (query: {id: string}) => {
     const {id} = query
     return new Promise( resolve => {

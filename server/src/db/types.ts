@@ -11,6 +11,8 @@ export interface Trip {
   members: TripMember[]
 }
 
+export type RequireKeys<T, TNames extends keyof T> = T & { [P in keyof T]-?: P extends TNames ? T[P] : never }
+
 export interface TripMember {
   name: string,
   expenses: string[]
@@ -21,7 +23,7 @@ export interface DBWrapper {
 }
 
 export interface CollectionWrapper<T> {
-  find?: (...args: any) => Promise<[T]>,
+  find?: (...args: any) => Promise<T[]>,
   findOne: (...args: any) => Promise<T>,
   updateOne?: () => Promise<T>,
   insertOne: (doc: T) => Promise<{insertedId: string}>

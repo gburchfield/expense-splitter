@@ -1,6 +1,7 @@
 import {AuthenticatedReq, DummyHandler, TripsController} from './types';
 import {createTripDoc} from './helpers';
 import db from '../db';
+import {CollectionWrapper, RequireKeys, Trip} from '../db/types';
 
 const CreateTrip: DummyHandler = async (req, res) => {
   const {name: memberName, body} = req as AuthenticatedReq
@@ -19,8 +20,11 @@ const CreateTrip: DummyHandler = async (req, res) => {
   }
 }
 
-const GetAllUserTrips: DummyHandler = (req, res) => {
-  res.json({message: 'dummy success message'})
+const GetAllUserTrips: DummyHandler = async (req, res) => {
+  const {name} = req as AuthenticatedReq
+  const DB = db.getConnection()
+  const trips = await (DB.trips as RequireKeys<CollectionWrapper<Trip>, 'find'>).find({name})
+  res.status(200).json(trips)
 }
 
 const GetTrip: DummyHandler = (req, res) => {
