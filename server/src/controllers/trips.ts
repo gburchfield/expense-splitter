@@ -1,5 +1,5 @@
 import {AuthenticatedReq, DummyHandler, TripsController} from './types';
-import {createTripDoc} from './helpers';
+import {authorizedForTrip, createTripDoc} from './helpers';
 import db from '../db';
 import {CollectionWrapper, RequireKeys, Trip} from '../db/types';
 
@@ -27,8 +27,18 @@ const GetAllUserTrips: DummyHandler = async (req, res) => {
   res.status(200).json(trips)
 }
 
-const GetTrip: DummyHandler = (req, res) => {
-  res.json({message: 'dummy success message'})
+const GetTrip: DummyHandler = async (req, res) => {
+  const {name, params} = req as AuthenticatedReq
+  console.log(params)
+  const {trip_id} = params
+  const query = {_id: trip_id}
+  const DB = db.getConnection()
+  const trip = await DB.trips.findOne(query)
+  if (trip && authorizedForTrip(name, trip)){
+    res.status(200).json(trip)
+  } else {
+    res.status(404).end()
+  }
 }
 
 const UpdateTrip: DummyHandler = (req, res) => {

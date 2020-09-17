@@ -1,4 +1,4 @@
-import {DecodeAuthHeader, IsAuthenticated} from './types';
+import {AuthorizedForTrip, DecodeAuthHeader, IsAuthenticated} from './types';
 import {CreateTripDoc} from '../db/types';
 import {v4} from 'uuid';
 
@@ -32,4 +32,11 @@ export const createTripDoc: CreateTripDoc = (tripName, memberName) => {
       }
     ]
   }
+}
+
+export const authorizedForTrip: AuthorizedForTrip = (name, trip) => {
+  let isAuthorized = false
+  const {members} = trip
+  members.forEach(x => isAuthorized = isAuthorized || x.name === name)
+  return isAuthorized
 }

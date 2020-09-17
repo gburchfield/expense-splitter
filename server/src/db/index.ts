@@ -31,10 +31,10 @@ const trips: CollectionWrapper<Trip> = {
       resolve(result)
     })
   },
-  findOne: (query: {id: string}) => {
-    const {id} = query
+  findOne: (query: {_id: string}) => {
+    const {_id} = query
     return new Promise( resolve => {
-      const trip = Trips.find(x => x._id === id)
+      const trip = Trips.find(x => x._id === _id)
       resolve(trip)
     })
   },
