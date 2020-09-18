@@ -8,15 +8,19 @@ import {ServerOptions} from 'http2';
 import {URL} from 'url';
 import {auth, trips} from './routes';
 import db from './db';
+import path from 'path'
 
 // Create and configure Express App
 const app = express()
 app.use(bodyParser.json())
 app.use(cookieParser())
 const distDir = __dirname + '/dist/'
-app.use(express.static(distDir))
+app.use('/', express.static(distDir, {redirect: false}))
 app.use('/auth', auth)
 app.use('/trips', trips)
+app.get('*', (req, res, next) => {
+  res.sendFile(path.resolve(`${distDir}index.html`))
+})
 
 // Set server options and create http server
 const serverOptions: ServerOptions = {}

@@ -32,7 +32,7 @@ export const createTripDoc: CreateTripDoc = (tripName, memberName) => {
 
 const createTripMemberDoc: CreateTripMemberDoc = (name) => {
   return {
-    name,
+    name: name.toLowerCase(),
     expenses: [],
     total_expense: '0',
     transactions: [],
@@ -41,6 +41,7 @@ const createTripMemberDoc: CreateTripMemberDoc = (name) => {
 }
 
 export const authorizedForTrip: AuthorizedForTrip = (name, trip) => {
+  name = name.toLowerCase()
   let isAuthorized = false
   const {members} = trip
   members.forEach(x => isAuthorized = isAuthorized || x.name === name)
@@ -48,6 +49,7 @@ export const authorizedForTrip: AuthorizedForTrip = (name, trip) => {
 }
 
 export const addExpenseToTrip: AddExpenseToTrip = (name, amount, trip) => {
+  name = name.toLowerCase()
   const expense: Expense = {
     _id: v4(),
     amount: toCurrency(amount)
@@ -69,9 +71,13 @@ export const addExpenseToTrip: AddExpenseToTrip = (name, amount, trip) => {
 }
 
 export const addMemberToTrip: AddMemberToTrip = (name, trip) => {
-  const member: TripMember = createTripMemberDoc(name)
-  trip.members.push(member)
-  trip = updateTransactions(trip)
+  let alreadyOnTrip = false
+  trip.members.forEach(x => alreadyOnTrip = alreadyOnTrip || x.name === name)
+  if (!alreadyOnTrip){
+    const member: TripMember = createTripMemberDoc(name)
+    trip.members.push(member)
+    trip = updateTransactions(trip)
+  }
   return trip
 }
 

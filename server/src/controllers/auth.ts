@@ -11,11 +11,11 @@ const Signup: RequestHandler = async (req, res) => {
   const {body: user} = req
   const DB = db.getConnection()
   if (user && user.name){
-    const alreadyExists = await DB.users.findOne({name: user.name})
+    const alreadyExists = await DB.users.findOne({name: user.name.toLowerCase()})
     if (!!alreadyExists){
       exceptionMessage = {message: `user already exists.`}
     } else {
-      const result = await DB.users.insertOne({name: user.name})
+      const result = await DB.users.insertOne({name: user.name.toLowerCase()})
       success = !!result && !!result.insertedId
     }
   } else {
@@ -39,7 +39,7 @@ const Login: RequestHandler = async (req, res) => {
   const {authorization} = headers
   if (!!authorization){
     const {username, password} = decodeAuthHeader(authorization as string)
-    user = await DB.users.findOne({name: username})
+    user = await DB.users.findOne({name: username.toLowerCase()})
   }
   if (!!user){
     res.writeHead(200, {'Set-Cookie': `token=${user.name}; HttpOnly; SameSite=Strict; Path=/;`}).end()

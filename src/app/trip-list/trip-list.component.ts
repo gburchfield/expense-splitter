@@ -51,6 +51,11 @@ export class TripListComponent implements OnInit {
     this.addExpenseForm = !this.addExpenseForm
   }
 
+  toggleTripComplete(): void {
+    // TODO Send trip complete to server
+    alert('Need to send to server still!')
+  }
+
   getTrips(): void {
     this.tripService.getTrips()
       .subscribe((trips) => {

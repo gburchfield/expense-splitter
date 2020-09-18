@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { HttpClientModule } from '@angular/common/http';
 import { TripListComponent } from './trip-list/trip-list.component';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { TripListComponent } from './trip-list/trip-list.component';
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    AppRoutingModule
+    AppRoutingModule,
+    CurrencyMaskModule
   ],
   providers: [],
   bootstrap: [AppComponent]

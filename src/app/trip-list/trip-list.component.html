@@ -12,6 +12,7 @@
     </div>
   </div>
   <div *ngIf="tripList && tripList.length > 0">
+    <span>(Click For Details)</span>
     <ul>
       <li *ngFor="let trip of tripList" (click)="getTripDetails(trip._id)">
         <span>{{trip.name}}</span>
@@ -51,9 +52,11 @@
     <div class="header">
       <h2>My Expenses</h2>
       <div>
-        <button *ngIf="!addExpenseForm" (click)="toggleAddExpenseForm()">Add Expense</button>
+        <button *ngIf="!tripComplete" (click)="toggleTripComplete()">Done With Expenses</button>
+        <button *ngIf="tripComplete" (click)="toggleTripComplete()">I Have More Expenses!</button>
+        <button *ngIf="!addExpenseForm && !tripComplete" (click)="toggleAddExpenseForm()">Add Expense</button>
         <div *ngIf="addExpenseForm">
-          <input [(ngModel)]="newExpenseBody.amount" placeholder="Enter Expense Amount">
+          <input currencyMask [(ngModel)]="newExpenseBody.amount" placeholder="Enter Expense Amount">
           <button (click)="addExpense()">Submit</button>
           <button (click)="toggleAddExpenseForm()">Cancel</button>
         </div>
@@ -68,7 +71,7 @@
   </div>
   <div *ngIf="myMemberData.transactions.length > 0" class="trip-detail-section">
     <div class="header">
-      <h2>Payments Due <span *ngIf="!tripComplete">(Projected)</span></h2>
+      <h2>Payments Due <span *ngIf="!tripComplete">(Projected... Waiting For Trip to Complete)</span></h2>
     </div>
     <ul>
       <li *ngFor="let transaction of myMemberData.transactions">

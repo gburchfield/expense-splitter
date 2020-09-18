@@ -24,7 +24,7 @@ const CreateTrip: RequestHandler = async (req, res) => {
 const GetAllUserTrips: RequestHandler = async (req, res) => {
   const {name} = req as AuthenticatedReq
   const DB = db.getConnection()
-  const trips = await (DB.trips as RequireKeys<CollectionWrapper<Trip>, 'find'>).find({name})
+  const trips = await (DB.trips as RequireKeys<CollectionWrapper<Trip>, 'find'>).find({name: name.toLowerCase()})
   res.status(200).json(trips)
 }
 
@@ -35,7 +35,7 @@ const GetTrip: RequestHandler = async (req, res) => {
   const DB = db.getConnection()
   const trip = await DB.trips.findOne(query)
   if (trip && authorizedForTrip(name, trip)){
-    trip.current_user = name
+    trip.current_user = name.toLowerCase()
     res.status(200).json(trip)
   } else {
     res.status(404).end()
@@ -79,7 +79,7 @@ const AddMember: RequestHandler = async (req, res) => {
   const {trip_id} = params
   const tripQuery = {_id: trip_id}
   const {name: memberName} = body
-  const memberQuery = {name: memberName}
+  const memberQuery = {name: memberName.toLowerCase()}
   if (memberName){
     const DB = db.getConnection()
     const member = await DB.users.findOne(memberQuery)
