@@ -22,6 +22,16 @@ export class AuthService {
       )
   }
 
+  postSignup(body: UserBody): Observable<{message: string}> {
+    const httpOptions = {
+      headers: new HttpHeaders({'Content-type': 'application/json'})
+    }
+    return this.http.post<{message: string}>(this.authUrl + '/signup', body, httpOptions)
+      .pipe(
+        catchError(this.handleError<{message: string}>('postSignup', {message: 'That username MIGHT be taken... I\'ll keep you guessing.'}))
+      )
+  }
+
   private handleError<T>(operation = 'operation', result?: T): (err: any) => Observable<T> {
     return (error: any): Observable<T> => {
 
@@ -44,4 +54,8 @@ const makeAuthHeader = (values: AuthHeaderValues): string => {
 
 export interface AuthHeaderValues {
   username: string
+}
+
+export interface UserBody {
+  name: string
 }

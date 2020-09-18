@@ -10,12 +10,20 @@ h1:first-child, h2:first-child {
   flex-grow: 1;
 }
 
-h1,h2,span {
+h1,h2,h3,h4,h5,h6,span {
   text-transform: capitalize;
 }
 
 p {
   text-align: center;
+}
+
+p > span {
+  font-weight: bold;
+}
+
+ul {
+  padding: 0;
 }
 
 .section {

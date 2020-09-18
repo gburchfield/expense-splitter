@@ -1,6 +1,24 @@
-<h1>Login</h1>
+<div class="header">
+  <h1 *ngIf="isLogin">Login</h1>
+  <h1 *ngIf="!isLogin">Sign Up</h1>
+  <button (click)="toggleIsLogin()">
+    <span *ngIf="isLogin">Go To Sign Up</span>
+    <span *ngIf="!isLogin">Go To Login</span>
+  </button>
+</div>
 
-<div>
-  <input [(ngModel)]="authHeaderValues.username" placeholder="Enter Username Here" />
+<div *ngIf="isLogin" class="form">
+  <input [(ngModel)]="authHeaderValues.username" placeholder="Username" />
   <button (click)="submitLogin()">Submit</button>
+</div>
+
+<div *ngIf="!isLogin" class="form">
+  <input [(ngModel)]="newUserBody.name" placeholder="Desired Username" />
+  <button (click)="submitSignup()">Submit</button>
+</div>
+
+<div class="form">
+  <p>Hint: 3 test users already exist for login with the names: Glen, Sophia, Corey</p>
+  <p>OR</p>
+  <p>Click <span style="font-weight: bold">Go To Sign Up</span> and start splitting expenses with friends!</p>
 </div>

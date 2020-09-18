@@ -12,12 +12,15 @@
     </div>
   </div>
   <div *ngIf="tripList && tripList.length > 0">
-    <span>(Click For Details)</span>
+    <p style="text-align: center">(Click For Details)</p>
     <ul>
       <li *ngFor="let trip of tripList" (click)="getTripDetails(trip._id)">
         <span>{{trip.name}}</span>
       </li>
     </ul>
+  </div>
+  <div *ngIf="tripList && tripList.length === 0">
+    <p>You have no trips yet!  Click <span>Add Trip</span> to start splitting expenses.</p>
   </div>
 </div>
 
@@ -42,11 +45,15 @@
     <ul *ngIf="tripDetails.members.length > 1">
       <div *ngFor="let member of tripDetails.members">
         <li *ngIf="member.name !== myMemberData.name">
-          <span>{{member.name}} has expensed: ${{member.total_expense}}</span>
+          <h4>{{member.name}}</h4>
+          <p>Has expensed: <span>${{member.total_expense}}</span></p>
+          <div *ngIf="member.transactions.length > 0">
+            <p *ngFor="let trans of member.transactions">Owes <span>{{trans.to === myMemberData.name ? 'YOU' : trans.to}}</span> <span> ${{trans.amount}}</span></p>
+          </div>
         </li>
       </div>
     </ul>
-    <p *ngIf="tripDetails.members.length <= 1">No other members</p>
+    <p *ngIf="tripDetails.members.length <= 1">No other members. Click <span>Add Person To Trip</span> to split expenses with them.</p>
   </div>
   <div class="trip-detail-section">
     <div class="header">
@@ -71,12 +78,12 @@
   </div>
   <div *ngIf="myMemberData.transactions.length > 0" class="trip-detail-section">
     <div class="header">
-      <h2>Payments Due <span *ngIf="!tripComplete">(Projected... Waiting For Trip to Complete)</span></h2>
+      <h2>Payments Due <span *ngIf="!tripComplete">(Projected... Waiting For Everyone to be Done With Expenses)</span></h2>
     </div>
     <ul>
       <li *ngFor="let transaction of myMemberData.transactions">
         <span>Send {{transaction.to}} </span>
-        <span>{{transaction.amount}}</span>
+        <span>${{transaction.amount}}</span>
       </li>
     </ul>
   </div>

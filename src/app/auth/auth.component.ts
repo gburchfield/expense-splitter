@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {AuthHeaderValues, AuthService} from '../auth.service';
+import {AuthHeaderValues, AuthService, UserBody} from '../auth.service';
 import {Router} from '@angular/router';
 
 @Component({
@@ -8,8 +8,12 @@ import {Router} from '@angular/router';
   styleUrls: ['./auth.component.css']
 })
 export class AuthComponent implements OnInit {
+  isLogin = true
   authHeaderValues: AuthHeaderValues = {
     username: ''
+  }
+  newUserBody: UserBody = {
+    name: ''
   }
   constructor(
     private authService: AuthService,
@@ -27,6 +31,18 @@ export class AuthComponent implements OnInit {
           this.router.navigate(['triplist'])
         }
       })
+  }
+
+  submitSignup(): void {
+    this.authService.postSignup(this.newUserBody)
+      .subscribe((res) => {
+        alert(res.message)
+        this.toggleIsLogin()
+      })
+  }
+
+  toggleIsLogin(): void {
+    this.isLogin = !this.isLogin
   }
 }
 
