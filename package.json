@@ -7,7 +7,7 @@
     "start:ng": "ng serve",
     "build": "npm run build:ng && npm run build:server",
     "build:ng": "ng build",
-    "build:server": "cp -r ./dist ./server/dist && tsc --build ./server/tsconfig.json",
+    "build:server": "mkdir -p ./server/dist && cp -r ./dist ./server/dist && tsc --build ./server/tsconfig.json",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
