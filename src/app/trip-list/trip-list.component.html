@@ -1,1 +1,80 @@
-<p>trip-list works!</p>
+<div class="section">
+  <button (click)="logout()">Logout</button>
+  <div class="header">
+    <h1>My Trips</h1>
+    <div>
+      <button *ngIf="!addTripForm" (click)="toggleNewTripForm()">Add Trip</button>
+      <div *ngIf="addTripForm">
+        <input [(ngModel)]="newTripBody.name" placeholder="Trip Name" />
+        <button (click)="addTrip()">Submit</button>
+        <button (click)="toggleNewTripForm()">Cancel</button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="tripList && tripList.length > 0">
+    <ul>
+      <li *ngFor="let trip of tripList" (click)="getTripDetails(trip._id)">
+        <span>{{trip.name}}</span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div *ngIf="tripDetails" class="section">
+  <div class="header">
+    <h1>{{myMemberData.name}}'s {{tripDetails.name}} Trip Details</h1>
+    <button (click)="getTripDetails(tripDetails._id)">Reload Trip Data</button>
+    <h3>Total Expenses: ${{tripDetails.total_expense}}</h3>
+  </div>
+  <div class="trip-detail-section">
+    <div class="header">
+      <h2>Other Trip Members</h2>
+      <div>
+        <button *ngIf="!addPersonForm" (click)="toggleAddPersonForm()">Add Person To Trip</button>
+        <div *ngIf="addPersonForm">
+          <input [(ngModel)]="newMemberBody.name" placeholder="Enter Person Name">
+          <button (click)="addPerson()">Submit</button>
+          <button (click)="toggleAddPersonForm()">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <ul *ngIf="tripDetails.members.length > 1">
+      <div *ngFor="let member of tripDetails.members">
+        <li *ngIf="member.name !== myMemberData.name">
+          <span>{{member.name}} has expensed: ${{member.total_expense}}</span>
+        </li>
+      </div>
+    </ul>
+    <p *ngIf="tripDetails.members.length <= 1">No other members</p>
+  </div>
+  <div class="trip-detail-section">
+    <div class="header">
+      <h2>My Expenses</h2>
+      <div>
+        <button *ngIf="!addExpenseForm" (click)="toggleAddExpenseForm()">Add Expense</button>
+        <div *ngIf="addExpenseForm">
+          <input [(ngModel)]="newExpenseBody.amount" placeholder="Enter Expense Amount">
+          <button (click)="addExpense()">Submit</button>
+          <button (click)="toggleAddExpenseForm()">Cancel</button>
+        </div>
+      </div>
+      <h4>Total: ${{myMemberData.total_expense}}</h4>
+    </div>
+    <ul>
+      <li *ngFor="let expense of myMemberData.expenses">
+        <span>${{expense.amount}}</span>
+      </li>
+    </ul>
+  </div>
+  <div *ngIf="myMemberData.transactions.length > 0" class="trip-detail-section">
+    <div class="header">
+      <h2>Payments Due <span *ngIf="!tripComplete">(Projected)</span></h2>
+    </div>
+    <ul>
+      <li *ngFor="let transaction of myMemberData.transactions">
+        <span>Send {{transaction.to}} </span>
+        <span>{{transaction.amount}}</span>
+      </li>
+    </ul>
+  </div>
+</div>

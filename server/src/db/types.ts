@@ -10,6 +10,7 @@ export interface User {
 export interface Trip {
   _id: string,
   name: string,
+  current_user?: string,
   members: TripMember[],
   total_expense: string
 }

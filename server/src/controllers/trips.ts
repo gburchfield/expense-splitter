@@ -35,6 +35,7 @@ const GetTrip: RequestHandler = async (req, res) => {
   const DB = db.getConnection()
   const trip = await DB.trips.findOne(query)
   if (trip && authorizedForTrip(name, trip)){
+    trip.current_user = name
     res.status(200).json(trip)
   } else {
     res.status(404).end()
