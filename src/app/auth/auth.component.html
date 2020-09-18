@@ -8,12 +8,12 @@
 </div>
 
 <div *ngIf="isLogin" class="form">
-  <input [(ngModel)]="authHeaderValues.username" placeholder="Username" />
+  <input [(ngModel)]="authHeaderValues.username" placeholder="Username" (keyup.enter)="submitLogin()" />
   <button (click)="submitLogin()">Submit</button>
 </div>
 
 <div *ngIf="!isLogin" class="form">
-  <input [(ngModel)]="newUserBody.name" placeholder="Desired Username" />
+  <input [(ngModel)]="newUserBody.name" placeholder="Desired Username" (keyup.enter)="submitSignup()"/>
   <button (click)="submitSignup()">Submit</button>
 </div>
 

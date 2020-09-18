@@ -5,7 +5,7 @@
     <div>
       <button *ngIf="!addTripForm" (click)="toggleNewTripForm()">Add Trip</button>
       <div *ngIf="addTripForm">
-        <input [(ngModel)]="newTripBody.name" placeholder="Trip Name" />
+        <input [(ngModel)]="newTripBody.name" placeholder="Trip Name" (keyup.enter)="addTrip()"/>
         <button (click)="addTrip()">Submit</button>
         <button (click)="toggleNewTripForm()">Cancel</button>
       </div>
@@ -36,7 +36,7 @@
       <div>
         <button *ngIf="!addPersonForm" (click)="toggleAddPersonForm()">Add Person To Trip</button>
         <div *ngIf="addPersonForm">
-          <input [(ngModel)]="newMemberBody.name" placeholder="Enter Person Name">
+          <input [(ngModel)]="newMemberBody.name" placeholder="Enter Person Name" (keyup.enter)="addPerson()">
           <button (click)="addPerson()">Submit</button>
           <button (click)="toggleAddPersonForm()">Cancel</button>
         </div>
@@ -63,7 +63,7 @@
         <button *ngIf="tripComplete" (click)="toggleTripComplete()">I Have More Expenses!</button>
         <button *ngIf="!addExpenseForm && !tripComplete" (click)="toggleAddExpenseForm()">Add Expense</button>
         <div *ngIf="addExpenseForm">
-          <input currencyMask [(ngModel)]="newExpenseBody.amount" placeholder="Enter Expense Amount">
+          <input currencyMask [(ngModel)]="newExpenseBody.amount" placeholder="Enter Expense Amount" (keyup.enter)="addExpense()">
           <button (click)="addExpense()">Submit</button>
           <button (click)="toggleAddExpenseForm()">Cancel</button>
         </div>
