@@ -51,7 +51,7 @@ const AddExpense: RequestHandler = async (req, res) => {
   const {trip_id} = params
   const query = {_id: trip_id}
   const {amount} = body
-  if (amount || !isNaN(parseFloat(amount))){
+  if (amount && !isNaN(parseFloat(amount))){
     const DB = db.getConnection()
     const trip = await DB.trips.findOne(query)
     if (trip && authorizedForTrip(name, trip)){
